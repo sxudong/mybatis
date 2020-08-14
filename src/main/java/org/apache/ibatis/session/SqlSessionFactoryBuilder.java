@@ -56,9 +56,12 @@ public class SqlSessionFactoryBuilder {
   //如果使用properties，那么就会加载那些properties（属性配置文件），那些属性可以用${propName}语法形式多次用在配置文件中。和Spring很像，一个思想？
   public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
     try {
-        //委托XMLConfigBuilder来解析xml文件，并构建
+      //委托 XMLConfigBuilder 来解析xml文件，并构建
       XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
-      return build(parser.parse());
+      // 这个返回的是 SqlSessionFactory，从这一行代码可以看出明面上是创建 Sqlsession 等对象,
+      // 实际上是初始化 Configuration 然后再串联不同的处理层，比如 sqlsession, methodproxy,
+      // mapperproxy,statement等
+      return build(parser.parse()); // parser.parse()这个方法其实返回的就是Configuration对象
     } catch (Exception e) {
         //这里是捕获异常，包装成自己的异常并抛出的idiom？，最后还要reset ErrorContext
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);
@@ -104,6 +107,8 @@ public class SqlSessionFactoryBuilder {
     
   //最后一个build方法使用了一个Configuration作为参数,并返回DefaultSqlSessionFactory
   public SqlSessionFactory build(Configuration config) {
+    // sqlSessionManager 的创建过程依赖 SqlSessionFactory对象，这里会先创建一个
+    // 默认的 sqlSession工厂，但是会依赖事先初始化好的 Configuration对象 去创建.
     return new DefaultSqlSessionFactory(config);
   }
 

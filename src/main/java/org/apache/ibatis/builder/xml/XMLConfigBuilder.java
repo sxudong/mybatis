@@ -530,11 +530,11 @@ public class XMLConfigBuilder extends BaseBuilder {
 //	</mappers>
   private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
-      for (XNode child : parent.getChildren()) {
+      for (XNode child : parent.getChildren()) { // 这里会通过for循环解析每一个 xxxDaoMapper.xml 文件
         if ("package".equals(child.getName())) {
           //10.4自动扫描包下所有映射器
           String mapperPackage = child.getStringAttribute("name");
-          configuration.addMappers(mapperPackage);
+          configuration.addMappers(mapperPackage); // 这里会将解析出的xml中的属性设置到configuration对象中
         } else {
           String resource = child.getStringAttribute("resource");
           String url = child.getStringAttribute("url");
@@ -546,7 +546,7 @@ public class XMLConfigBuilder extends BaseBuilder {
             //映射器比较复杂，调用XMLMapperBuilder
             //注意在for循环里每个mapper都重新new一个XMLMapperBuilder，来解析
             XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
-            mapperParser.parse();
+            mapperParser.parse(); // 这里具体会对每一个 xxxDaoMapper.xml 进行解析
           } else if (resource == null && url != null && mapperClass == null) {
             //10.2使用绝对url路径
             ErrorContext.instance().resource(url);

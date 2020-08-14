@@ -261,7 +261,7 @@ public class XMLMapperBuilder extends BaseBuilder {
   //已经被废弃了!老式风格的参数映射。可以忽略
   private void parameterMapElement(List<XNode> list) throws Exception {
     for (XNode parameterMapNode : list) {
-      String id = parameterMapNode.getStringAttribute("id");
+      String id = parameterMapNode.getStringAttribute("id"); // 这里会针对每个xxxDaoMapper.xml做解析，循环解析xml中的CRUD方法
       String type = parameterMapNode.getStringAttribute("type");
       Class<?> parameterClass = resolveClass(type);
       List<XNode> parameterNodes = parameterMapNode.evalNodes("parameter");

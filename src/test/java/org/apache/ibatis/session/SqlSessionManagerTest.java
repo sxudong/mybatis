@@ -32,6 +32,7 @@ import org.junit.Test;
 
 public class SqlSessionManagerTest extends BaseDataTest {
 
+  // SqlSessionManager implements SqlSessionFactory
   private static SqlSessionManager manager;
 
   @BeforeClass
@@ -55,6 +56,7 @@ public class SqlSessionManagerTest extends BaseDataTest {
     }
   }
 
+  // 测试这个方法 Debug 查看 Mybatis框架 启动流程
   @Test
   public void shouldCommitInsertedAuthor() throws Exception {
     try {
